@@ -15,13 +15,4 @@ public class DbConnection {
     public Connection connect() throws SQLException {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
-
-    public boolean testConnection() {
-        try (Connection conn = connect()) {
-            return conn != null && !conn.isClosed();
-        } catch (SQLException e) {
-            System.err.println("DB Connection Failed: " + e.getMessage());
-            return false;
-        }
-    }
 }

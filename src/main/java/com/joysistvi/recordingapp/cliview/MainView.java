@@ -6,11 +6,18 @@ public class MainView {
 
     private final ArtistView artistView;
     private final AlbumView albumView;
+    private final SongView songView;
+    private final PlaylistView playlistView;
     private final Scanner scanner;
 
-    public MainView(ArtistView artistView, AlbumView albumView) {
+    public MainView(ArtistView artistView,
+                    AlbumView albumView,
+                    SongView songView,
+                    PlaylistView playlistView) {
         this.artistView = artistView;
         this.albumView = albumView;
+        this.songView = songView;
+        this.playlistView = playlistView;
         this.scanner = new Scanner(System.in);
     }
 
@@ -20,6 +27,8 @@ public class MainView {
             System.out.println("\n===== RECORDING STUDIO APP =====");
             System.out.println("1. Artist Management");
             System.out.println("2. Album Management");
+            System.out.println("3. Song Management");
+            System.out.println("4. Playlist Management");
             System.out.println("0. Exit");
             System.out.print("Choice: ");
 
@@ -28,6 +37,8 @@ public class MainView {
             switch (choice) {
                 case 1 -> artistView.showMenu();
                 case 2 -> albumView.showMenu();
+                case 3 -> songView.showMenu();
+                case 4 -> playlistView.showMenu();
                 case 0 -> System.out.println("Goodbye!");
                 default -> System.out.println("Invalid choice.");
             }

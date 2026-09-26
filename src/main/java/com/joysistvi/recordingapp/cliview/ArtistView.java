@@ -95,8 +95,6 @@ public class ArtistView {
         System.out.println(success ? "Artist deleted." : "Failed to delete artist.");
     }
 
-    // ---------- HELPERS ----------
-
     private void printArtistTable(List<Artists> artists) {
         if (artists == null || artists.isEmpty()) {
             System.out.println("No artists found.");
@@ -109,10 +107,16 @@ public class ArtistView {
         System.out.println("+-------+----------------------+");
 
         for (Artists a : artists) {
-            System.out.printf("| %-5d | %-20s |%n", a.getId(), a.getName());
+            System.out.printf("| %-5d | %-20s |%n", a.getId(), truncate(a.getName(), 20));
         }
 
         System.out.println("+-------+----------------------+");
+    }
+
+    private String truncate(String text, int max) {
+        if (text == null) return "";
+        if (text.length() <= max) return text;
+        return text.substring(0, max - 3) + "...";
     }
 
     private int readInt() {

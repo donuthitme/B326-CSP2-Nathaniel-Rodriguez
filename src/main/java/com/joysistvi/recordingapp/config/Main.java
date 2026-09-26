@@ -1,19 +1,11 @@
 package com.joysistvi.recordingapp.config;
 
-import com.joysistvi.recordingapp.cliview.AlbumView;
-import com.joysistvi.recordingapp.cliview.ArtistView;
 import com.joysistvi.recordingapp.cliview.MainView;
-import com.joysistvi.recordingapp.controller.AlbumController;
-import com.joysistvi.recordingapp.controller.ArtistsController;
 import com.joysistvi.recordingapp.dao.ArtistsDao;
-import com.joysistvi.recordingapp.repository.AlbumRepo;
-import com.joysistvi.recordingapp.repository.AlbumRepoImpl;
-import com.joysistvi.recordingapp.repository.ArtistRepoImpl;
-import com.joysistvi.recordingapp.repository.ArtistsRepo;
-import com.joysistvi.recordingapp.service.AlbumService;
-import com.joysistvi.recordingapp.service.AlbumServiceImpl;
-import com.joysistvi.recordingapp.service.ArtistService;
-import com.joysistvi.recordingapp.service.ArtistServiceImpl;
+import com.joysistvi.recordingapp.repository.*;
+import com.joysistvi.recordingapp.service.*;
+import com.joysistvi.recordingapp.controller.*;
+import com.joysistvi.recordingapp.cliview.*;
 
 
 import java.sql.Connection;
@@ -36,8 +28,20 @@ public class Main extends DbConnection {
         AlbumController albumController = new AlbumController(albumService);
         AlbumView albumView = new AlbumView(albumController);
 
+        //Song
+        SongRepo songRepo = new SongRepoImpl(dbConnection);
+        SongService songService = new SongServiceImpl(songRepo);
+        SongController songController = new SongController(songService);
+        SongView songView = new SongView(songController);
+
+        //Playlist
+        PlaylistRepo playlistRepo = new PlaylistRepoImpl(dbConnection);
+        PlaylistService playlistService = new PlaylistServiceImpl(playlistRepo);
+        PlaylistController playlistController = new PlaylistController(playlistService);
+        PlaylistView playlistView = new PlaylistView(playlistController);
+
         //Main Menu
-        MainView mainView = new MainView(artistView, albumView);
+        MainView mainView = new MainView(artistView, albumView, songView,  playlistView);
         mainView.showMainMenu();
 
 

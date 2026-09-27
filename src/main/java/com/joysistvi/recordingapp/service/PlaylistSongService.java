@@ -12,5 +12,6 @@ public interface PlaylistSongService {
     boolean addSongToPlaylist(PlaylistSong playlistSong);
     boolean removeSongFromPlaylist(int playlistId, int songId);
     boolean deletePlaylistSong(int id);
-
+    List<Object[]> getSongsInPlaylistWithDetails(int playlistId);
+    boolean isSongInPlaylist(int playlistId, int songId);
 }

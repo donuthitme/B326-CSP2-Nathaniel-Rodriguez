@@ -13,5 +13,6 @@ public interface AlbumRepo {
     boolean createAlbum(Album album);
     boolean updateAlbum(Album album);
     boolean deleteAlbum(int id);
+    List<Object[]> getAllAlbumsWithArtist();
 
 }

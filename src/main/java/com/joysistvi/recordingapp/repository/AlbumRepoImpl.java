@@ -180,4 +180,32 @@ public class AlbumRepoImpl implements AlbumRepo {
         }
         return false;
     }
+
+    // getAllAlbumsWithArtist
+    @Override
+    public List<Object[]> getAllAlbumsWithArtist() {
+        List<Object[]> rows = new ArrayList<>();
+        String query = "SELECT a.id, a.name, a.year, ar.name AS artist_name " +
+                "FROM albums a " +
+                "JOIN artists ar ON a.artist_id = ar.id " +
+                "ORDER BY a.id";
+
+        try (Connection conn = dbConnection.connect();
+             Statement stmnt = conn.createStatement();
+             ResultSet result = stmnt.executeQuery(query)) {
+
+            while (result.next()) {
+                rows.add(new Object[]{
+                        result.getInt("id"),
+                        result.getString("name"),
+                        result.getInt("year"),
+                        result.getString("artist_name")
+                });
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Get All Albums With Artist: " + e.getMessage());
+        }
+        return rows;
+    }
 }

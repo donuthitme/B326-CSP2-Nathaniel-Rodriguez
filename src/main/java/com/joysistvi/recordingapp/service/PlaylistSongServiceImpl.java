@@ -80,4 +80,20 @@ public class PlaylistSongServiceImpl implements PlaylistSongService {
         }
         return playlistSongRepo.deletePlaylistSong(id);
     }
+
+    @Override
+    public List<Object[]> getSongsInPlaylistWithDetails(int playlistId) {
+        if (playlistId <= 0) {
+            return List.of();
+        }
+        return playlistSongRepo.getSongsInPlaylistWithDetails(playlistId);
+    }
+
+    @Override
+    public boolean isSongInPlaylist(int playlistId, int songId) {
+        if (playlistId <= 0 || songId <= 0) {
+            return false;
+        }
+        return playlistSongRepo.isSongInPlaylist(playlistId, songId);
+    }
 }

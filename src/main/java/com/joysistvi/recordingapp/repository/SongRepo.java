@@ -13,5 +13,7 @@ public interface SongRepo {
     boolean createSong(Song song);
     boolean updateSong(Song song);
     boolean deleteSong(int id);
+    List<Object[]> getAllSongsWithDetails();
+    List<Object[]> searchSongsWithDetails(String keyword);
 
 }

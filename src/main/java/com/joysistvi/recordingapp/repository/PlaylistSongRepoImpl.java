@@ -143,4 +143,65 @@ public class PlaylistSongRepoImpl implements PlaylistSongRepo {
         }
         return false;
     }
+
+    // getSongsInPlaylistWithDetails
+    @Override
+    public List<Object[]> getSongsInPlaylistWithDetails(int playlistId) {
+        List<Object[]> rows = new ArrayList<>();
+        String query = "SELECT s.id, s.title, s.length, s.genre, " +
+                "al.name AS album_name, ar.name AS artist_name " +
+                "FROM playlist_songs ps " +
+                "JOIN songs s ON ps.song_id = s.id " +
+                "JOIN albums al ON s.album_id = al.id " +
+                "JOIN artists ar ON al.artist_id = ar.id " +
+                "WHERE ps.playlist_id = ? " +
+                "ORDER BY s.title";
+
+        try (Connection conn = dbConnection.connect();
+             PreparedStatement prep = conn.prepareStatement(query)) {
+
+            prep.setInt(1, playlistId);
+
+            try (ResultSet result = prep.executeQuery()) {
+                while (result.next()) {
+                    rows.add(new Object[]{
+                            result.getInt("id"),
+                            result.getString("title"),
+                            result.getString("length"),
+                            result.getString("genre"),
+                            result.getString("album_name"),
+                            result.getString("artist_name")
+                    });
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Get Songs In Playlist With Details: " + e.getMessage());
+        }
+        return rows;
+    }
+
+    // isSongInPlaylist
+    @Override
+    public boolean isSongInPlaylist(int playlistId, int songId) {
+        String query = "SELECT COUNT(*) AS cnt FROM playlist_songs " +
+                "WHERE playlist_id = ? AND song_id = ?";
+
+        try (Connection conn = dbConnection.connect();
+             PreparedStatement prep = conn.prepareStatement(query)) {
+
+            prep.setInt(1, playlistId);
+            prep.setInt(2, songId);
+
+            try (ResultSet result = prep.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("cnt") > 0;
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Is Song In Playlist: " + e.getMessage());
+        }
+        return false;
+    }
 }

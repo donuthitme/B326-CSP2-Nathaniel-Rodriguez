@@ -29,7 +29,8 @@ public class UserRepoImpl implements UserRepo {
                 users.add(new User(
                         result.getInt("id"),
                         result.getString("username"),
-                        result.getString("password")));
+                        result.getString("password"),
+                        result.getString("role")));     // ← NEW
             }
 
         } catch (SQLException e) {
@@ -53,7 +54,8 @@ public class UserRepoImpl implements UserRepo {
                     return new User(
                             result.getInt("id"),
                             result.getString("username"),
-                            result.getString("password"));
+                            result.getString("password"),
+                            result.getString("role"));  // ← NEW
                 }
             }
 
@@ -78,7 +80,8 @@ public class UserRepoImpl implements UserRepo {
                     return new User(
                             result.getInt("id"),
                             result.getString("username"),
-                            result.getString("password"));
+                            result.getString("password"),
+                            result.getString("role"));  // ← NEW
                 }
             }
 
@@ -91,13 +94,14 @@ public class UserRepoImpl implements UserRepo {
     // createUser
     @Override
     public boolean createUser(User user) {
-        String query = "INSERT INTO users (username, password) VALUES (?, ?)";
+        String query = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
 
         try (Connection conn = dbConnection.connect();
              PreparedStatement prep = conn.prepareStatement(query)) {
 
             prep.setString(1, user.getUsername());
             prep.setString(2, user.getPassword());
+            prep.setString(3, user.getRole());          // ← NEW
 
             return prep.executeUpdate() > 0;
 
@@ -110,14 +114,15 @@ public class UserRepoImpl implements UserRepo {
     // updateUser
     @Override
     public boolean updateUser(User user) {
-        String query = "UPDATE users SET username = ?, password = ? WHERE id = ?";
+        String query = "UPDATE users SET username = ?, password = ?, role = ? WHERE id = ?";
 
         try (Connection conn = dbConnection.connect();
              PreparedStatement prep = conn.prepareStatement(query)) {
 
             prep.setString(1, user.getUsername());
             prep.setString(2, user.getPassword());
-            prep.setInt(3, user.getId());
+            prep.setString(3, user.getRole());          // ← NEW
+            prep.setInt(4, user.getId());
 
             return prep.executeUpdate() > 0;
 
@@ -143,4 +148,5 @@ public class UserRepoImpl implements UserRepo {
         }
         return false;
     }
+
 }

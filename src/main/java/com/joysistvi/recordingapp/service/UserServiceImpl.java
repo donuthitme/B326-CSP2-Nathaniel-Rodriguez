@@ -13,13 +13,11 @@ public class UserServiceImpl implements UserService {
         this.userRepo = userRepo;
     }
 
-    // getAllUsers
     @Override
     public List<User> getAllUsers() {
         return userRepo.getAllUsers();
     }
 
-    // getUserById
     @Override
     public User getUserById(int id) {
         if (id <= 0) {
@@ -33,21 +31,15 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    // getUserByUsername
     @Override
     public User getUserByUsername(String username) {
         if (username == null || username.trim().isEmpty()) {
             System.out.println("Username cannot be empty.");
             return null;
         }
-        User user = userRepo.getUserByUsername(username.trim());
-        if (user == null) {
-            System.out.println("User not found");
-        }
-        return user;
+        return userRepo.getUserByUsername(username.trim());
     }
 
-    // createUser
     @Override
     public boolean createUser(User user) {
         if (user == null) {
@@ -62,11 +54,12 @@ public class UserServiceImpl implements UserService {
             System.out.println("Password is required");
             return false;
         }
-
-        // Optional: prevent duplicate usernames
         if (userRepo.getUserByUsername(user.getUsername().trim()) != null) {
             System.out.println("Username already exists.");
             return false;
+        }
+        if (user.getRole() == null || user.getRole().trim().isEmpty()) {
+            user.setRole("USER");
         }
 
         user.setUsername(user.getUsername().trim());
@@ -74,7 +67,6 @@ public class UserServiceImpl implements UserService {
         return userRepo.createUser(user);
     }
 
-    // updateUser
     @Override
     public boolean updateUser(User user) {
         if (user == null || user.getId() <= 0) {
@@ -89,13 +81,15 @@ public class UserServiceImpl implements UserService {
             System.out.println("Password cannot be empty.");
             return false;
         }
+        if (user.getRole() == null || user.getRole().trim().isEmpty()) {
+            user.setRole("USER");
+        }
 
         user.setUsername(user.getUsername().trim());
         user.setPassword(user.getPassword().trim());
         return userRepo.updateUser(user);
     }
 
-    // deleteUser
     @Override
     public boolean deleteUser(int id) {
         if (id <= 0) {
@@ -103,5 +97,48 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         return userRepo.deleteUser(id);
+    }
+
+    @Override
+    public User login(String username, String password) {
+        if (username == null || username.trim().isEmpty()) {
+            System.out.println("Username cannot be empty.");
+            return null;
+        }
+        if (password == null || password.isEmpty()) {
+            System.out.println("Password cannot be empty.");
+            return null;
+        }
+
+        User user = userRepo.getUserByUsername(username.trim());
+        if (user == null) {
+            System.out.println("Invalid username or password.");
+            return null;
+        }
+
+        if (!user.getPassword().equals(password)) {
+            System.out.println("Invalid username or password.");
+            return null;
+        }
+        return user;
+    }
+
+    @Override
+    public boolean register(String username, String password) {
+        if (username == null || username.trim().isEmpty()) {
+            System.out.println("Username cannot be empty.");
+            return false;
+        }
+        if (password == null || password.length() < 4) {
+            System.out.println("Password must be at least 4 characters.");
+            return false;
+        }
+        if (userRepo.getUserByUsername(username.trim()) != null) {
+            System.out.println("Username already taken.");
+            return false;
+        }
+
+        User newUser = new User(username.trim(), password, "USER");
+        return userRepo.createUser(newUser);
     }
 }

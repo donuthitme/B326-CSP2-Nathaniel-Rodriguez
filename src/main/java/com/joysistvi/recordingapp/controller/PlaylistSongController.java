@@ -36,4 +36,12 @@ public class PlaylistSongController {
     public boolean deletePlaylistSong(int id) {
         return playlistSongService.deletePlaylistSong(id);
     }
+
+    public List<Object[]> getSongsInPlaylistWithDetails(int playlistId) {
+        return playlistSongService.getSongsInPlaylistWithDetails(playlistId);
+    }
+
+    public boolean isSongInPlaylist(int playlistId, int songId) {
+        return playlistSongService.isSongInPlaylist(playlistId, songId);
+    }
 }
